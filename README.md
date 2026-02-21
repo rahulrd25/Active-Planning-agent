@@ -95,7 +95,7 @@ Active-planning-agent/
 ### Installation
 ```bash
 # clone the repo
-git clone <repo-url>
+git clone https://github.com/rahulrd25/Active-Planning-agent
 cd Active-planning-agent
 
 # install dependencies
@@ -149,22 +149,22 @@ uv run pytest tests/integration/ -v
 LangGraph provides a proper stateful graph with conditional routing. This lets the agent dynamically decide what to do each turn rather than following a fixed chain. The `MemorySaver` checkpointer gives multi-turn memory for free using `thread_id`.
 
 ### Intent classification as a separate node
-Every turn starts with intent classification before any action is taken. This keeps the agent responsive to mid-conversation pivots — if a user switches from creating to editing, the agent handles it cleanly without getting confused.
+Every turn starts with intent classification before any action is taken. This keeps the agent responsive to mid-conversation pivots, if a user switches from creating to editing, the agent handles it cleanly without getting confused.
 
 ### Services layer with no LLM dependency
 `plan_manager.py` and `context_manager.py` are pure Python with no LLM calls. This makes them fully testable in isolation and keeps business logic separate from AI logic. Diffing plans, tracking versions, and counting tokens are deterministic operations that shouldn't depend on an LLM.
 
 ### Plan JSON survives context compression
-When old messages are compressed into a summary, the current plan JSON is always re-injected into context as a system message. The plan is the ground truth of all decisions made — losing it would break the agent's continuity.
+When old messages are compressed into a summary, the current plan JSON is always re-injected into context as a system message. The plan is the ground truth of all decisions made, losing it would break the agent's continuity.
 
 ### Structured outputs via Pydantic
 Every LLM call that produces data uses a defined Pydantic model. This catches malformed responses early and gives the rest of the codebase reliable, typed data to work with.
 
 ### Diff by ID not by position
-Plan steps have UUIDs that persist across edits. When diffing two plan versions, we compare by ID — not by order or title. This correctly identifies genuinely new, removed, or modified steps even when the order changes.
+Plan steps have UUIDs that persist across edits. When diffing two plan versions, we compare by ID. This correctly identifies genuinely new, removed, or modified steps even when the order changes.
 
 ### Prompts in one file
-All LLM prompts live in `prompts.py`. When the agent behaves incorrectly, the first debugging step is always prompt tuning — having them in one place makes this fast.
+All LLM prompts live in `prompts.py`. When the agent behaves incorrectly, the first debugging step is always prompt tuning, having them in one place makes this fast.
 
 ---
 
